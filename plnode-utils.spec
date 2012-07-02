@@ -35,5 +35,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %{python_sitelib}/*
+%{_bindir}
 
 %changelog
