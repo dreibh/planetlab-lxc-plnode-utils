@@ -38,6 +38,10 @@ python setup.py install --skip-build --root "$RPM_BUILD_ROOT"
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+# moved from util-vserver-pl package
+%post
+/usr/bin/bwlimit init
+
 %files
 %{python_sitelib}/*
 %{_bindir}
