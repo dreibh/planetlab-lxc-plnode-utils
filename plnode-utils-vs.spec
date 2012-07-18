@@ -1,5 +1,5 @@
 %define name plnode-utils
-%define version 0.1
+%define version 0.2
 %define taglevel 1
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
@@ -18,13 +18,18 @@ Packager: PlanetLab Central <support@planet-lab.org>
 Distribution: PlanetLab %{plrelease}
 URL: %{SCMURL}
 
+Provides: bwlimit
+
 %description
-This package provides the plnode_utils python package that provides utilities used in various places on a PlanetLab node, nodemanager among others
+This python package provides utilities like bwlimit, used in various places on a PlanetLab node, nodemanager and mom among others. It aims at cleaning up the packaging scheme, as bwlimit used to ship with util-vserver-pl, but is relevant in the lxc variant as well.
 
 %prep
 %setup -q
 
 %build
+# xxx fixme
+# this is where we chose which flavour of bwlimit gets shipped
+cp bwlimit_vs.py bwlimit.py
 python setup.py build
 
 %install
