@@ -1,4 +1,6 @@
 #!/usr/bin/python
+#
+# This file is under git as plnode-utils/bwlimit_vs.py
 # 
 # Bandwidth limit module for PlanetLab nodes. The intent is to use the
 # Hierarchical Token Bucket (HTB) queueing discipline (qdisc) to allow
@@ -45,8 +47,6 @@
 # Andy Bavier <acb@cs.princeton.edu>
 # Mark Huang <mlhuang@cs.princeton.edu>
 # Copyright (C) 2006 The Trustees of Princeton University
-#
-# $Id: bwlimit.py,v 1.15 2007/02/07 04:21:11 mlhuang Exp $
 #
 
 import sys, os, re, getopt
@@ -578,7 +578,6 @@ def on(xid, dev = dev, share = None, minrate = None, maxrate = None, minexemptra
 
     tc("qdisc replace dev %s parent 1:%x handle %x pfifo" % \
        (dev, exempt_minor | xid, exempt_minor | xid))
-
 
 def set(xid, share = None, minrate = None, maxrate = None, minexemptrate = None, maxexemptrate = None, dev = dev ):
     on(xid = xid, dev = dev, share = share,

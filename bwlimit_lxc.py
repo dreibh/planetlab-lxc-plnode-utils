@@ -1,14 +1,6 @@
 #!/usr/bin/python
 #
-# TEMPORARY
-# this file historically came with util-vserver-pl which is not available
-# on lxc-powered nodes
-# it is thus intended to become packaged separately at some point
-#
-# It was renamed into bwlimitlxc so that this branch can be tested on
-# vserver nodes as well
-# TEMPORARY
-
+# This file is under git as plnode-utils/bwlimit_lxc.py
 # 
 # Bandwidth limit module for PlanetLab nodes. The intent is to use the
 # Hierarchical Token Bucket (HTB) queueing discipline (qdisc) to allow
@@ -332,6 +324,7 @@ def tc(cmd):
 
     return run(TC + " " + cmd)
 
+
 def ebtables(cmd):
     """
     Shortcut for running a ebtables command
@@ -589,7 +582,7 @@ def on(xid, dev = dev, share = None, minrate = None, maxrate = None, minexemptra
 
     tc("class replace dev %s parent 1:20 classid 1:%x htb rate %dbit ceil %dbit quantum %d" % \
        (dev, exempt_minor | xid, minexemptrate, maxexemptrate, share * quantum))
-    
+
     # Attach a FIFO to each subclass, which helps to throttle back
     # processes that are sending faster than the token buckets can
     # support.
@@ -604,6 +597,7 @@ def on(xid, dev = dev, share = None, minrate = None, maxrate = None, minexemptra
     # The handle number is a mark created by ebtables with the xid
     tc("filter replace dev %s parent 1: protocol ip prio 1 handle %d fw flowid 1:%x" % \
         (dev, xid, default_minor | xid))
+
 
 def set(xid, share = None, minrate = None, maxrate = None, minexemptrate = None, maxexemptrate = None, dev = dev ):
     on(xid = xid, dev = dev, share = share,
