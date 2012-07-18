@@ -29,7 +29,7 @@ This python package provides utilities like bwlimit, used in various places on a
 %build
 # xxx fixme
 # this is where we chose which flavour of bwlimit gets shipped
-cp bwlimit_lxc.py bwlimit.py
+cp plnode/bwlimit_lxc.py plnode/bwlimit.py
 python setup.py build
 
 %install
