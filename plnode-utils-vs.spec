@@ -4,6 +4,9 @@
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
 
+# for f12
+%{!?python_sitelib: %define python_sitelib %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+
 Summary: Python utilities for a PlanetLab node
 Name: %{name}
 Version: %{version}
