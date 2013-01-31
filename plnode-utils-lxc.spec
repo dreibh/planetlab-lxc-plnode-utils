@@ -33,10 +33,10 @@ This python package provides utilities like bwlimit, used in various places on a
 # xxx fixme
 # this is where we chose which flavour of bwlimit gets shipped
 cp plnode/bwlimit_lxc.py plnode/bwlimit.py
-python setup.py build
+/usr/bin/python setup.py build
 
 %install
-python setup.py install --skip-build --root "$RPM_BUILD_ROOT"
+/usr/bin/python setup.py install --skip-build --root "$RPM_BUILD_ROOT"
 
 %clean
 rm -rf $RPM_BUILD_ROOT
