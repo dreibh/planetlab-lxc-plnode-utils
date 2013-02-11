@@ -1,6 +1,6 @@
 %define name plnode-utils
 %define version 0.2
-%define taglevel 1
+%define taglevel 2
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
 
@@ -33,6 +33,8 @@ This python package provides utilities like bwlimit, used in various places on a
 # xxx fixme
 # this is where we chose which flavour of bwlimit gets shipped
 cp plnode/bwlimit_vs.py plnode/bwlimit.py
+# for backwards compatibilty until legacy packages import from plnode
+cp plnode/bwlimit_vs.py bwlimit.py
 /usr/bin/python setup.py build
 
 %install
