@@ -1,6 +1,6 @@
 %define name plnode-utils
 %define version 0.2
-%define taglevel 2
+%define taglevel 1
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
 
