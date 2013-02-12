@@ -1,6 +1,6 @@
 %define name plnode-utils
 %define version 0.2
-%define taglevel 1
+%define taglevel 2
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
 
@@ -46,3 +46,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 
 %changelog
+* Mon Feb 11 2013 Stephen Soltesz <soltesz@opentechinstitute.org> - plnode-utils-0.2-2
+- import bwlimit from plnode dir, and keep legacy support.
+
