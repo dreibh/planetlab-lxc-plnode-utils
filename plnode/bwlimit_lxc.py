@@ -190,7 +190,7 @@ def get_tc_rate(s):
     if m is None:
         return -1
     suffix = m.group(2).lower()
-    if suffixes.has_key(suffix):
+    if suffix in suffixes:
         return int(float(m.group(1)) * suffixes[suffix])
     else:
         return -1
@@ -251,11 +251,11 @@ def get_bwcap(dev = dev):
 
     state = tc("-d class show dev %s" % dev)
     base_re = re.compile(r"class htb 1:10 parent 1:1 .*ceil ([^ ]+) .*")
-    base_classes = filter(None, map(base_re.match, state))
+    base_classes = [_f for _f in map(base_re.match, state) if _f]
     if not base_classes:
         return -1
     if len(base_classes) > 1:
-        raise Exception, "unable to get current bwcap"
+        raise Exception("unable to get current bwcap")
     return get_tc_rate(base_classes[0].group(1))
 
 
@@ -312,7 +312,7 @@ def run(cmd, input = None):
             output = None
         if fileobj.close() is None:
             return output
-    except Exception, e:
+    except Exception as e:
         pass
     return None
 
@@ -460,7 +460,7 @@ def get(xid = None, dev = dev):
             # Slice ID
             id = int(params.group(1), 16) & 0x0FFF;
 
-            if rates.has_key(id):
+            if id in rates:
                 rate = rates[id]
             else:
                 rate = {'id': id}
@@ -497,9 +497,9 @@ def get(xid = None, dev = dev):
 
         # Keep parsing until we get everything
         if rate is not None and \
-           rate.has_key('min') and rate.has_key('minexempt') and \
-           rate.has_key('max') and rate.has_key('maxexempt') and \
-           rate.has_key('bytes') and rate.has_key('exemptbytes'):
+           'min' in rate and 'minexempt' in rate and \
+           'max' in rate and 'maxexempt' in rate and \
+           'bytes' in rate and 'exemptbytes' in rate:
             params = (rate['id'], rate['share'],
                       rate['min'], rate['max'],
                       rate['minexempt'], rate['maxexempt'],
@@ -647,7 +647,7 @@ def exempt_init(group_name, node_ips):
 def usage():
     bwcap_description = format_tc_rate(get_bwcap())
         
-    print """
+    print("""
 Usage:
 
 %s [OPTION]... [COMMAND] [ARGUMENT]...
@@ -671,7 +671,7 @@ Commands:
                 Get all bandwidth parameters for all slices
         get slice
                 Get bandwidth parameters for the specified slice
-""" % (sys.argv[0], dev, bwcap_description, quantum)
+""" % (sys.argv[0], dev, bwcap_description, quantum))
     sys.exit(1)
     
 
@@ -734,17 +734,17 @@ def main():
                     # Orphaned (not associated with a slice) class
                     slice = "%d?" % xid
                 if numeric:
-                    print "%s %d %d %d %d %d %d %d" % \
+                    print("%s %d %d %d %d %d %d %d" % \
                           (slice, share,
                            minrate, maxrate,
                            minexemptrate, maxexemptrate,
-                           bytes, exemptbytes)
+                           bytes, exemptbytes))
                 else:
-                    print "%s %d %s %s %s %s %s %s" % \
+                    print("%s %d %s %s %s %s %s %s" % \
                           (slice, share,
                            format_tc_rate(minrate), format_tc_rate(maxrate),
                            format_tc_rate(minexemptrate), format_tc_rate(maxexemptrate),
-                           format_bytes(bytes), format_bytes(exemptbytes))
+                           format_bytes(bytes), format_bytes(exemptbytes)))
 
         elif len(argv) >= 2:
             # slice, ...
