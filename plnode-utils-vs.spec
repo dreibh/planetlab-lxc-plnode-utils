@@ -4,8 +4,7 @@
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
 
-# for f12
-%{!?python_sitelib: %define python_sitelib %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%define python3_sitelib %(python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 
 Summary: Python utilities for a PlanetLab node
 Name: %{name}
@@ -24,7 +23,7 @@ URL: %{SCMURL}
 Provides: bwlimit
 
 %description
-This python package provides utilities like bwlimit, used in various places on a PlanetLab node, nodemanager and mom among others. It aims at cleaning up the packaging scheme, as bwlimit used to ship with util-vserver-pl, but is relevant in the lxc variant as well.
+This python3 package provides utilities like bwlimit, used in various places on a PlanetLab node, nodemanager and mom among others. It aims at cleaning up the packaging scheme, as bwlimit used to ship with util-vserver-pl, but is relevant in the lxc variant as well.
 
 %prep
 %setup -q
@@ -35,10 +34,10 @@ This python package provides utilities like bwlimit, used in various places on a
 cp plnode/bwlimit_vs.py plnode/bwlimit.py
 # for backwards compatibilty until legacy packages import from plnode
 cp plnode/bwlimit_vs.py bwlimit.py
-/usr/bin/python setup.py build
+python3 setup.py build
 
 %install
-/usr/bin/python setup.py install --skip-build --root "$RPM_BUILD_ROOT"
+python3 setup.py install --skip-build --root "$RPM_BUILD_ROOT"
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -48,10 +47,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/bwlimit init
 
 %files
-%{python_sitelib}/*
+%{python3_sitelib}/*
 %{_bindir}/*
 
 %changelog
 * Mon Feb 11 2013 Stephen Soltesz <soltesz@opentechinstitute.org> - plnode-utils-0.2-2
 - import bwlimit from plnode dir, and keep legacy support.
-
