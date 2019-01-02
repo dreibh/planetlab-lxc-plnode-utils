@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # This file is under git as plnode-utils/bwlimit_lxc.py
-# 
+#
 # Bandwidth limit module for PlanetLab nodes. The intent is to use the
 # Hierarchical Token Bucket (HTB) queueing discipline (qdisc) to allow
 # slices to fairly share access to available node bandwidth. We
@@ -184,8 +184,10 @@ def get_tc_rate(s):
     Parses an integer or a tc rate string (e.g., 1.5mbit) into bits/second
     """
 
-    if type(s) == int:
+    if isinstance(s, int):
         return s
+    if isinstance(s, float):
+        return int(s)
     m = re.match(r"([0-9.]+)(\D*)", s)
     if m is None:
         return -1
@@ -381,7 +383,7 @@ def init(dev = dev, bwcap = bwmax):
     tc("class add dev %s parent 1:1 classid 1:10 htb rate %dbit ceil %dbit" % \
        (dev, bwmin, bwcap))
 
-    # Set up a subclass for DRL(Distributed Rate Limiting). 
+    # Set up a subclass for DRL(Distributed Rate Limiting).
     # DRL will directly modify that subclass implementing the site limits.
     tc("class add dev %s parent 1:10 classid 1:100 htb rate %dbit ceil %dbit" % \
        (dev, bwmin, bwcap))
@@ -436,7 +438,7 @@ def get(xid = None, dev = dev):
     #  Sent 6851486 bytes 49244 pkt (dropped 0, overlimits 0 requeues 0)
     # ...
     # class htb 1:2000 parent 1:20 leaf 2000: prio 0 quantum 8000 rate 8bit ceil 1000Mbit ...
-    #  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0) 
+    #  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
     # ...
     for line in tc("-s -d class show dev %s" % dev):
         # Rate parameter line
@@ -516,7 +518,9 @@ def get(xid = None, dev = dev):
     return ret
 
 
-def on(xid, dev = dev, share = None, minrate = None, maxrate = None, minexemptrate = None, maxexemptrate = None):
+def on(xid, dev=dev, share=None,
+       minrate=None, maxrate=None,
+       minexemptrate=None, maxexemptrate=None):
     """
     Apply specified bandwidth limit to the specified slice xid
     """
@@ -599,16 +603,18 @@ def on(xid, dev = dev, share = None, minrate = None, maxrate = None, minexemptra
         (dev, xid, default_minor | xid))
 
 
-def set(xid, share = None, minrate = None, maxrate = None, minexemptrate = None, maxexemptrate = None, dev = dev ):
-    on(xid = xid, dev = dev, share = share,
-       minrate = minrate, maxrate = maxrate,
-       minexemptrate = minexemptrate, maxexemptrate = maxexemptrate)
+def set(xid, share=None,
+        minrate=None, maxrate=None,
+        minexemptrate=None, maxexemptrate=None, dev=dev):
+    on(xid=xid, dev=dev, share=share,
+       minrate=minrate, maxrate=maxrate,
+       minexemptrate=minexemptrate, maxexemptrate=maxexemptrate)
 
 
 # Remove class associated with specified slice xid. If further packets
 # are seen from this slice, they will be classified into the default
 # class 1:1FFF.
-def off(xid, dev = dev):
+def off(xid, dev=dev):
     """
     Remove class associated with specified slice xid. If further
     packets are seen from this slice, they will be classified into the
@@ -646,7 +652,7 @@ def exempt_init(group_name, node_ips):
 
 def usage():
     bwcap_description = format_tc_rate(get_bwcap())
-        
+
     print("""
 Usage:
 
@@ -673,7 +679,7 @@ Commands:
                 Get bandwidth parameters for the specified slice
 """ % (sys.argv[0], dev, bwcap_description, quantum))
     sys.exit(1)
-    
+
 
 def main():
     global dev, quantum, verbose
