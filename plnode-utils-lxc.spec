@@ -1,6 +1,6 @@
 %define name plnode-utils
-%define version 0.2
-%define taglevel 2
+%define version 1.0
+%define taglevel 0
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
 
@@ -45,5 +45,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 
 %changelog
+* Mon Jan 07 2019 Thierry <Parmentelat> - plnode-utils-1.0-0
+- ported to python3 + various cleanups
+- more tolerant wrt units (accepts more floats)
+
 * Mon Feb 11 2013 Stephen Soltesz <soltesz@opentechinstitute.org> - plnode-utils-0.2-2
 - import bwlimit from plnode dir, and keep legacy support.
